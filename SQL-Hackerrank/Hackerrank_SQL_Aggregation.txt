@@ -1,0 +1,39 @@
+1.select count(id) from city where population>100000
+2.select sum(population) from city where district='California'
+3.select avg(population) from city where district='California'
+4.select floor(avg(population)) from city
+5.select sum(population) from city where countrycode='JPN'
+6.select max(population)-min(population) from city
+7.select max(population)-min(population) from city
+8.select (salary*months), count(*) from employee
+   group by 1 /*ez jelenti a (salary*months)-ot */
+   order by 1 desc limit 1
+9.select round(sum(lat_n),2), round(sum(long_w),2) from station
+10.select round(sum(lat_n),4) from station where lat_n<137.2345 and lat_n>38.7880
+11.select truncate(max(lat_n),4) from station where lat_n<137.2345
+12.select round(long_w,4) from station where 
+     lat_n<137.2345
+     order by lat_n desc
+     limit 1;
+13.select round(min(lat_n),4) from station where lat_n>38.7880
+14.select round(long_w,4) from station where 
+lat_n>38.7780
+order by lat_n asc
+limit 1;
+15.select round(
+abs(min(lat_n)-max(lat_n))+
+abs(min(long_w)-max(long_w))
+ ,4) from station
+16.select round(sqrt((
+        power(min(long_w)-max(long_w),2)
+       +power(min(lat_n)-max(lat_n),2))
+     ),4) from station
+
+17. set @rowindex:=-1;
+select round(avg(l.lat),4) from
+(select @rowindex:=@rowindex + 1 AS rowindex,lat_n as lat from station
+        order by lat) as L
+where L.rowindex in (floor(@rowindex / 2) , ceil(@rowindex / 2));   
+
+
+

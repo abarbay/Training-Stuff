@@ -1,0 +1,47 @@
+1.	select case when (A+B>C and A+C>B and B+C>A) then 
+             case when (A=B and B=C) then 'Equilateral'
+             when (A=B or B=C or A=C) then 'Isosceles'
+             when(A!=B or B!=C or A!=C) then 'Scalene' end
+             else 'Not A Triangle'
+             end from triangles;
+2.	select concat(name,concat("(",Upper(left(occupation,1)),")")) from occupations order
+by name asc;
+select concat("There are a total of ", count(occupation)," ", concat(lower(occupation),"s.")) as total from occupations group by occupation order by total;
+3.	SET @d = 0, @p = 0, @s = 0, @a = 0;
+Select MIN(Doctor), MIN(professor), MIN(singer),MIN(actor) from
+(SELECT  CASE Occupation    
+                WHEN 'Doctor'       THEN @d := @d + 1
+                WHEN 'Professor'    THEN @p := @p + 1
+                WHEN 'Singer'       THEN @s:= @s + 1
+                WHEN 'Actor'        THEN @a := @a + 1
+            END AS row,
+            IF (Occupation = 'Doctor', Name, NULL) AS Doctor,
+            IF (Occupation = 'Professor', Name, NULL) AS Professor,
+            IF (Occupation = 'Singer', Name, NULL) AS Singer,
+            IF (Occupation = 'Actor', Name, NULL) AS Actor
+    FROM    OCCUPATIONS
+    ORDER BY Name) as a
+group by row;
+
+4. 	select n, (case 
+	when p is null then 'Root'
+	when n not in (select p from bst where p is not null) then 'Leaf'
+	else 'Inner' end) from bst order by n;
+
+5. select c.company_code, c.founder, 
+        count(distinct l.lead_manager_code),
+        count(distinct s.senior_manager_code),
+        count(distinct m.manager_code),
+        count(distinct e.employee_code)
+        from company c, lead_manager l, senior_manager s, manager m, employee e
+        where c.company_code=l.company_code
+            and l.lead_manager_code=s.lead_manager_code
+            and s.senior_manager_code=m.senior_manager_code
+            and m.manager_code=e.manager_code
+group by c.company_code, c.founder
+order by c.company_code
+
+
+
+
+
