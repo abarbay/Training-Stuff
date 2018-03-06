@@ -1,0 +1,20 @@
+﻿1. select * from city where population>100000 and countrycode="USA";
+2. select name from city where population>120000 and countrycode="USA";
+3. select * from city;
+4. select * from city where ID=1661;
+5. select * from city where countrycode="JPN";
+6. select name from city where countrycode="JPN";
+7. select city,state from station;
+8. select distinct city from station where id%2=0;
+9. select count(city)-count(distinct city) from station;
+10. select distinct city, CHAR_LENGTH(city) as lng from station order by lng, city limit 1;
+select distinct city, CHAR_LENGTH(city) as lng from station order by lng desc,city limit 1;
+1. select distinct city from station where (city like "a%" or city like "e%" or city like "i%" or city like "o%" or city like "u%")
+2. select distinct city from station where (city like "%A" or city like "%e" or city like "%i" or city like "%o" or city like "%u")
+3. select distinct city from station where (city like "a%" or city like "e%" or city like "i%" or city like "o%" or city like "u%") and (city like "%a" or city like "%e" or city like "%i" or city like "%o" or city like "%u")
+4. select distinct city from station where (city  not like "a%" and city not like "e%" and city not like "i%" and city not like "o%" and city  not like "u%")
+5. select distinct city from station where (city  not like "%a" and city not like "%e" and city not like "%i" and city not like "%o" and city  not like "%u")
+6. select distinct city from station where (city  not like "%a" and city not like "%e" and city not like "%i" and city not like "%o" and city  not like "%u") or (city  not like "a%" and city not like "e%" and city not like "i%" and city not like "o%" and city  not like "u%")
+7. select name from students where marks>75 order by right(name,3), id
+8. select name from employee order by name
+9. select name from employee where salary>2000 and months<10
