@@ -1,0 +1,79 @@
+﻿1.select sum(city.population) from  city 
+inner join country  on city.countrycode=country.code
+where
+continent='Asia'
+
+
+2.select city.name from  city 
+inner join country  on city.countrycode=country.code
+where
+continent='Africa'
+
+
+3.select country.continent, floor(avg(city.population)) from city
+inner join country on city.countrycode=country.code
+group by country.continent
+
+
+4.select If(Grades.Grade<8,NULL,Students.Name),Grades.Grade, Students.Marks
+from Students
+inner join Grades on Students.Marks between Grades.Min_Mark and Grades.Max_Mark
+Order by Grades.grade desc, Students.name asc;
+
+
+5.select h.hacker_id,h.name
+from submissions s
+inner join challenges c on  s.challenge_id=c.challenge_id
+inner join difficulty d on  d.difficulty_level=c.difficulty_level and d.score=s.score
+inner join hackers h on h.hacker_id=s.hacker_id
+group by h.hacker_id, h.name
+having count(s.hacker_id)>1
+order by count(s.hacker_id) desc, s.hacker_id asc
+
+
+6.select w.id,p.age,w.coins_needed,w.power from wands w
+inner join wands_property p on w.code=p.code
+where is_evil='0'
+and coins_needed=(select min(coins_needed)
+                    from wands w1, wands_property p1
+                    where
+                    w1.code=p1.code and
+                    w1.power=w.power and 
+                    p1.age=p.age) /* subquery needed to select the cheapest price on same age and power*/
+order by w.power desc, p.age desc
+
+
+________________
+
+
+7.
+select c.hacker_id, h.name, count(c.challenge_id) as total from challenges c
+inner join hackers h on h.hacker_id=c.hacker_id
+group by h.name, c.hacker_id having
+-- Higest number of challlenges with al the creators
+total=(select count(challenge_id) from challenges
+       group by hacker_id
+       order by count(challenge_id) desc
+       limit 1)
+       
+or
+-- All the unique number of created challenges
+total in
+(select total from
+(select count(c1.challenge_id) as total from challenges c1
+group by c1.hacker_id) as t1
+group by total
+having count(total)=1)
+
+
+order by total desc, c.hacker_id asc;
+8.
+select t2.hacker_id,name,sum(t2.score) from
+(select name,hacker_id,challenge_id, max(score) as score from
+(select name, s.hacker_id, s.challenge_id, score from submissions s
+inner join hackers h on s.hacker_id=h.hacker_id
+group by name, s.hacker_id, challenge_id, score) as t1
+group by name,hacker_id,challenge_id) as t2
+group by name,t2.hacker_id
+having sum(score)>0
+order by sum(t2.score) desc, hacker_id asc

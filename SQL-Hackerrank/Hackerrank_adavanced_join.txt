@@ -1,0 +1,55 @@
+﻿1.
+SET sql_mode = ''; /* to change full group my mode*/
+select start_date,end_date from
+(select start_date from projects
+where start_date not in(select end_date from projects)) as t1
+,
+(select end_date from projects 
+where end_date not in(select start_date from projects)) as t2
+where start_date<end_date
+group by start_date
+order by datediff(end_date,start_date),start_date
+
+
+2.
+select name from
+(select s.id, s.name, sl.salary, f.friend_id as bf_id, bf.name as bf_name, bfsl.salary as bf_salary from friends f
+inner join students s on s.id=f.id
+inner join students bf on bf.id=f.friend_id
+inner join packages sl on f.id=sl.id
+inner join packages bfsl on f.friend_id=bfsl.id
+where sl.salary<bfsl.salary
+order by bf_salary) as t1
+
+
+3.
+select * from functions
+where x=y
+group by x
+having count(x)>1
+union all
+select f.x, f.y from functions f
+inner join
+(select * from functions
+where x!=y) as t1 on (f.x=t1.y and f.y=t1.x) and f.x<t1.x
+order by x
+
+
+________________
+
+
+4. select con.contest_id, con.hacker_id,con.name,
+        sum(sub.ts),
+        sum(sub.tas),
+        sum(vie.tv),
+        sum(vie.tuv)from contests con
+inner join colleges col on col.contest_id=con.contest_id
+inner join challenges cha on cha.college_id=col.college_id
+left join(select challenge_id,sum(total_views) as tv,
+sum(total_unique_views) as tuv from view_stats
+group by challenge_id) as vie on vie.challenge_id=cha.challenge_id
+left join(select challenge_id, sum(total_submissions)as ts,
+sum(total_accepted_submissions) as tas from submission_stats
+group by challenge_id) as sub on sub.challenge_id=cha.challenge_id
+group by con.contest_id, con.hacker_id,con.name
+order by con.contest_id
