@@ -1,4 +1,4 @@
-// 60fps animation a setTimeout funkciót hívja 60/mp
+// 60fps animation a setTimeout funkciót hívja 60mp
 var animate=window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame   ||
     window.mozRequestAnimationFrame      ||
